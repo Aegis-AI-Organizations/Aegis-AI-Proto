@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package aegis.v1;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/Aegis-AI-Organizations/aegis-ai-proto/aegis/v1";
+
+message StartScanRequest {
+  string target_image = 1;
+}
+
+message StartScanResponse {
+  string scan_id = 1;
+  string status = 2;
+  google.protobuf.Timestamp started_at = 3;
+}
+
+message GetScanStatusRequest {
+  string scan_id = 1;
+}
+
+message GetScanStatusResponse {
+  string scan_id = 1;
+  string status = 2;
+  google.protobuf.Timestamp started_at = 3;
+  google.protobuf.Timestamp completed_at = 4;
+}
+
+service ScanService {
+  rpc StartScan(StartScanRequest) returns (StartScanResponse);
+  rpc GetScanStatus(GetScanStatusRequest) returns (GetScanStatusResponse);
+}
