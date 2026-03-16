@@ -6,5 +6,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Skip
-        run: echo "No specific build/test steps defined for this repository type."
+      - name: Setup Buf
+        uses: bufbuild/buf-setup-action@v1
+      - name: Validate Proto Contracts
+        run: |
+          buf lint
+          buf build
+      - name: Coverage Policy
+        run: |
+          echo "Coverage N/A: this repository only contains protobuf contracts and generated artifacts are validated through buf lint/build."
