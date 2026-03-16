@@ -1,0 +1,56 @@
+name: Proto Sync
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  generate-and-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Proto Repo
+        uses: actions/checkout@v4
+
+      - name: Setup Buf
+        uses: bufbuild/buf-setup-action@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Generate Code
+        run: buf generate
+
+      - name: Sync Go Code (Gateway)
+        run: |
+          git config --global user.email "action@github.com"
+          git config --global user.name "GitHub Action"
+
+          # Clone Target Repo
+          git clone https://x-access-token:${{ secrets.PROTO_SYNC_TOKEN }}@github.com/${{ github.repository_owner }}/Aegis-AI-Api-Gateway.git gateway-repo
+
+          # Copy generated files
+          mkdir -p gateway-repo/internal/grpc
+          cp -r gen/go/* gateway-repo/internal/grpc/
+
+          cd gateway-repo
+          git add .
+          if ! git diff-index --quiet HEAD; then
+            git commit -m "[UPDATE] gRPC code sync from Aegis-AI-Proto"
+            git push
+          fi
+
+      - name: Sync Python Code (Brain)
+        run: |
+          # Clone Target Repo
+          git clone https://x-access-token:${{ secrets.PROTO_SYNC_TOKEN }}@github.com/${{ github.repository_owner }}/Aegis-AI-Brain.git brain-repo
+
+          # Copy generated files
+          mkdir -p brain-repo/src/aegis
+          cp -r gen/python/* brain-repo/src/
+
+          cd brain-repo
+          git add .
+          if ! git diff-index --quiet HEAD; then
+            git commit -m "[UPDATE] gRPC code sync from Aegis-AI-Proto"
+            git push
+          fi
