@@ -20,3 +20,8 @@ jobs:
   call-tests:
     needs: call-lint
     uses: ./.github/workflows/build-and-test.yml
+
+  # 3. Proto Sync
+  call-proto-sync:
+    needs: call-tests
+    uses: ./.github/workflows/proto-sync.yml
