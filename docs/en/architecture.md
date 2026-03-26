@@ -1,20 +1,17 @@
-# Architecture | Aegis-AI-Proto
+# Protobuf Ecosystem Architecture (v2)
 
-Cette documentation présente l'architecture "Pure Microservices" mise en place pour le projet Aegis AI.
+This repository (`Aegis-AI-Proto`) is the single source of truth for all inter-microservice communication within the **Aegis AI Platform**. It uses `buf` to orchestrate protocol buffer compilation and manages the centralized generation of gRPC stubs.
 
-## Vue d'Ensemble
-L'infrastructure s'articule autour d'une séparation stricte des responsabilités afin d'améliorer la scalabilité et l'isolation des dépendances.
+## Version 2 (MVP)
+In the MVP architecture, the Aegis framework relies exclusively on **gRPC over HTTP/2** for communication between the API Gateway and the Brain orchestrator.
 
-1. **Aegis-AI-Api-Gateway** (Le Front)
-   - Agit exclusivement comme **Proxy gRPC**.
-   - Ne possède **plus** de connexion à la base de données PostgreSQL.
-   - Ne communique **pas** avec le cluster Temporal.
-   - Toutes les requêtes HTTP (REST) entrantes sont converties en appels gRPC vers le backend métier.
+### Service Definitions
+- **`aegis.v2.ScanService`**: Controls the lifecycle of security scans (`StartScan`, `GetScanStatus`, `ListScans`, `GetScanReport`).
+- **`aegis.v2.VulnerabilityService`**: Retrieves the findings and cryptographic evidence (`GetVulnerabilities`, `GetEvidences`).
+- **`aegis.v2.PingService`**: Validates end-to-end connectivity across the cluster.
 
-2. **Aegis-AI-Brain** (Le Core Métier)
-   - Héberge un serveur **gRPC** pour réceptionner les commandes de l'API Gateway.
-   - Responsable exclusif des écritures et lectures dans **PostgreSQL** (`psycopg`).
-   - S'occupe de la communication avec **Temporal** pour lancer les workflows d'orchestration (`PentestWorkflow`).
-
-3. **Aegis-AI-Proto** (Les Contrats)
-   - Contient les définitions Protobuf (`scan.proto`, `vulnerability.proto`, `ping.proto`) utilisées pour la génération du code asynchrone Go et Python.
+### CI/CD Code Sync
+Because protocol buffers tightly couple the orchestrators, this repository features an auto-sync pipeline.
+Whenever pushing to `main`, `.github/workflows/proto-sync.yml` automatically compiles the `v2` `.proto` definitions into Go and Python stubs. It inherently strips out troublesome runtime version validation statements from generated files to ensure extreme ecosystem compatibility, and actively propagates (pushes) the code to:
+- `Aegis-AI-Api-Gateway` (Golang implementations)
+- `Aegis-AI-Brain` (Python implementations)

@@ -1,20 +1,17 @@
-# [FR] # Architecture | Aegis-AI-Proto
+# Architecture de l'Écosystème Protobuf (v2)
 
-Cette documentation présente l'architecture "Pure Microservices" mise en place pour le projet Aegis AI.
+Ce dépôt (`Aegis-AI-Proto`) constitue la source de vérité unique régissant toutes les communications inter-microservices au sein de la **Plateforme Aegis AI**. Il utilise `buf` pour orchestrer la compilation des protocol buffers et gère la génération centralisée des stubs gRPC.
 
-## Vue d'Ensemble
-L'infrastructure s'articule autour d'une séparation stricte des responsabilités afin d'améliorer la scalabilité et l'isolation des dépendances.
+## Version 2 (MVP)
+Dans l'architecture MVP, le domaine Aegis s'appuie unilatéralement sur **gRPC via HTTP/2** pour le trafic névralgique entre l'API Gateway et l'orchestrateur central (Brain).
 
-1. **Aegis-AI-Api-Gateway** (Le Front)
-   - Agit exclusivement comme **Proxy gRPC**.
-   - Ne possède **plus** de connexion à la base de données PostgreSQL.
-   - Ne communique **pas** avec le cluster Temporal.
-   - Toutes les requêtes HTTP (REST) entrantes sont converties en appels gRPC vers le backend métier.
+### Définitions des Services
+- **`aegis.v2.ScanService`** : Contrôle le cycle de vie des scans de sécurité (`StartScan`, `GetScanStatus`, `ListScans`, `GetScanReport`).
+- **`aegis.v2.VulnerabilityService`** : Indexe les conclusions et preuves cryptographiques de piratage (`GetVulnerabilities`, `GetEvidences`).
+- **`aegis.v2.PingService`** : Valide d'un simple ping la connectivité de bout en bout sur le cluster interne.
 
-2. **Aegis-AI-Brain** (Le Core Métier)
-   - Héberge un serveur **gRPC** pour réceptionner les commandes de l'API Gateway.
-   - Responsable exclusif des écritures et lectures dans **PostgreSQL** (`psycopg`).
-   - S'occupe de la communication avec **Temporal** pour lancer les workflows d'orchestration (`PentestWorkflow`).
-
-3. **Aegis-AI-Proto** (Les Contrats)
-   - Contient les définitions Protobuf (`scan.proto`, `vulnerability.proto`, `ping.proto`) utilisées pour la génération du code asynchrone Go et Python.
+### CI/CD Code Sync Automatique
+Étant donné le couplage contractuel très fort induit par le gRPC, ce référentiel embarque une pipeline d'auto-déploiement.
+À chaque fusion sur `main`, `.github/workflows/proto-sync.yml` recompile les `.proto` de la `v2` en fichiers Go et Python. Pour garantir une compatibilité d'écosystème radicale, le runner détruit chirurgicalement les contremesures de versions des runtimes insérées par la génération. Les stubs tout beaux tout neufs sont ensuite poussés aux bénéficiaires :
+- `Aegis-AI-Api-Gateway` (Implémentations Go)
+- `Aegis-AI-Brain` (Implémentations Python)
