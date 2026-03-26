@@ -44,7 +44,7 @@ jobs:
           # Strip the ValidateProtobufRuntimeVersion block from generated Python files
           python3 -c "
           import os, re
-          d = 'gen/python/aegis/v1'
+          d = 'gen/python/aegis/v2'
           if os.path.exists(d):
               for f in os.listdir(d):
                   if f.endswith('_pb2.py'):

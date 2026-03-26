@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package aegis.v1;
+package aegis.v2;
 
 import "google/protobuf/timestamp.proto";
 
