@@ -25,6 +25,8 @@ message GetScanStatusResponse {
   string status = 2;
   google.protobuf.Timestamp started_at = 3;
   google.protobuf.Timestamp completed_at = 4;
+  string target_image = 5;
+  string temporal_workflow_id = 6;
 }
 
 message ListScansRequest {}
@@ -50,9 +52,19 @@ message GetScanReportResponse {
   bytes pdf_data = 1;
 }
 
+message WatchScanStatusRequest {
+    string scan_id = 1;
+}
+
+message WatchScanStatusResponse {
+    string scan_id = 1;
+    string status = 2;
+}
+
 service ScanService {
   rpc StartScan(StartScanRequest) returns (StartScanResponse);
   rpc GetScanStatus(GetScanStatusRequest) returns (GetScanStatusResponse);
   rpc ListScans(ListScansRequest) returns (ListScansResponse);
   rpc GetScanReport(GetScanReportRequest) returns (GetScanReportResponse);
+  rpc WatchScanStatus(WatchScanStatusRequest) returns (stream WatchScanStatusResponse);
 }
