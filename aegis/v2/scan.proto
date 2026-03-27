@@ -50,9 +50,19 @@ message GetScanReportResponse {
   bytes pdf_data = 1;
 }
 
+message WatchScanStatusRequest {
+    string scan_id = 1;
+}
+
+message WatchScanStatusResponse {
+    string scan_id = 1;
+    string status = 2;
+}
+
 service ScanService {
   rpc StartScan(StartScanRequest) returns (StartScanResponse);
   rpc GetScanStatus(GetScanStatusRequest) returns (GetScanStatusResponse);
   rpc ListScans(ListScansRequest) returns (ListScansResponse);
   rpc GetScanReport(GetScanReportRequest) returns (GetScanReportResponse);
+  rpc WatchScanStatus(WatchScanStatusRequest) returns (stream WatchScanStatusResponse);
 }
