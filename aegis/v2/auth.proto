@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package aegis.v2;
+
+option go_package = "github.com/Aegis-AI-Organizations/aegis-ai-proto/aegis/v2";
+
+// AuthService handles user authentication, session management, and JWT generation.
+service AuthService {
+  // Login authenticates a user and returns an access token and refresh token.
+  rpc Login(LoginRequest) returns (LoginResponse);
+
+  // Refresh generates a new access token using a valid refresh token.
+  rpc Refresh(RefreshRequest) returns (RefreshResponse);
+
+  // Logout invalidates a refresh token.
+  rpc Logout(LogoutRequest) returns (LogoutResponse);
+}
+
+message LoginRequest {
+  string email = 1;
+  string password = 2;
+}
+
+message LoginResponse {
+  string access_token = 1;
+  string refresh_token = 2;
+}
+
+message RefreshRequest {
+  string refresh_token = 1;
+}
+
+message RefreshResponse {
+  string access_token = 1;
+}
+
+message LogoutRequest {
+  string refresh_token = 1;
+}
+
+message LogoutResponse {
+  bool success = 1;
+}

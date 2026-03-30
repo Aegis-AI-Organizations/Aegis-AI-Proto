@@ -6,6 +6,24 @@ import "google/protobuf/timestamp.proto";
 
 option go_package = "github.com/Aegis-AI-Organizations/aegis-ai-proto/aegis/v2";
 
+// ScanService handles orchestration of security scans.
+service ScanService {
+  // StartScan initiates a new security scan for a target image.
+  rpc StartScan(StartScanRequest) returns (StartScanResponse);
+
+  // GetScanStatus returns the current status and timing of a scan.
+  rpc GetScanStatus(GetScanStatusRequest) returns (GetScanStatusResponse);
+
+  // ListScans retrieves a history of all scans.
+  rpc ListScans(ListScansRequest) returns (ListScansResponse);
+
+  // GetScanReport returns the PDF report data for a completed scan.
+  rpc GetScanReport(GetScanReportRequest) returns (GetScanReportResponse);
+
+  // WatchScanStatus provides a stream of scan status updates.
+  rpc WatchScanStatus(WatchScanStatusRequest) returns (stream WatchScanStatusResponse);
+}
+
 message StartScanRequest {
   string target_image = 1;
 }
@@ -25,16 +43,14 @@ message GetScanStatusResponse {
   string status = 2;
   google.protobuf.Timestamp started_at = 3;
   google.protobuf.Timestamp completed_at = 4;
-  string target_image = 5;
-  string temporal_workflow_id = 6;
 }
 
 message ListScansRequest {}
 
 message ScanDetails {
   string scan_id = 1;
-  string target_image = 2;
-  string temporal_workflow_id = 3;
+  string temporal_workflow_id = 2;
+  string target_image = 3;
   string status = 4;
   google.protobuf.Timestamp started_at = 5;
   google.protobuf.Timestamp completed_at = 6;
@@ -53,18 +69,10 @@ message GetScanReportResponse {
 }
 
 message WatchScanStatusRequest {
-    string scan_id = 1;
+  string scan_id = 1;
 }
 
 message WatchScanStatusResponse {
-    string scan_id = 1;
-    string status = 2;
-}
-
-service ScanService {
-  rpc StartScan(StartScanRequest) returns (StartScanResponse);
-  rpc GetScanStatus(GetScanStatusRequest) returns (GetScanStatusResponse);
-  rpc ListScans(ListScansRequest) returns (ListScansResponse);
-  rpc GetScanReport(GetScanReportRequest) returns (GetScanReportResponse);
-  rpc WatchScanStatus(WatchScanStatusRequest) returns (stream WatchScanStatusResponse);
+  string scan_id = 1;
+  string status = 2;
 }
