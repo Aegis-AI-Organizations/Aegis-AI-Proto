@@ -31,7 +31,7 @@ message RefreshRequest {
 }
 
 message RefreshResponse {
-  string access_token = 2;
+  string access_token = 1;
 }
 
 message LogoutRequest {
