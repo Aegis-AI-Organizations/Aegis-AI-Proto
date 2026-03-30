@@ -20,6 +20,11 @@ jobs:
       - name: Generate Code
         run: buf generate
 
+      - name: Install pre-commit
+        run: |
+          python3 -m pip install --user pre-commit
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+
       - name: Sync Go Code (Gateway)
         run: |
           git config --global user.email "action@github.com"
@@ -34,6 +39,18 @@ jobs:
 
           cd gateway-repo
           git add .
+
+          # Auto-apply repository formatting/lint hooks on generated changes.
+          if [ -f .pre-commit-config.yaml ] && ! git diff-index --quiet HEAD; then
+            CHANGED_FILES=$(git diff --name-only --cached)
+            pre-commit run --files $CHANGED_FILES || true
+            git add .
+            CHANGED_FILES=$(git diff --name-only --cached)
+            if [ -n "$CHANGED_FILES" ]; then
+              pre-commit run --files $CHANGED_FILES
+            fi
+          fi
+
           if ! git diff-index --quiet HEAD; then
             git commit -m "[UPDATE] gRPC code sync from Aegis-AI-Proto"
             git push
@@ -41,6 +58,21 @@ jobs:
 
       - name: Sync Python Code (Brain)
         run: |
+          # Strip the ValidateProtobufRuntimeVersion block from generated Python files
+          python3 -c "
+          import os, re
+          d = 'gen/python/aegis/v2'
+          if os.path.exists(d):
+              for f in os.listdir(d):
+                  if f.endswith('_pb2.py'):
+                      p = os.path.join(d, f)
+                      with open(p, 'r') as file:
+                          content = file.read()
+                      content = re.sub(r'_runtime_version\.ValidateProtobufRuntimeVersion\([\s\S]*?\)\n', '', content, flags=re.MULTILINE)
+                      with open(p, 'w') as file:
+                          file.write(content)
+          "
+
           # Clone Target Repo
           git clone https://x-access-token:${{ secrets.PROTO_SYNC_TOKEN }}@github.com/${{ github.repository_owner }}/Aegis-AI-Brain.git brain-repo
 
@@ -50,6 +82,18 @@ jobs:
 
           cd brain-repo
           git add .
+
+          # Auto-apply repository formatting/lint hooks on generated changes.
+          if [ -f .pre-commit-config.yaml ] && ! git diff-index --quiet HEAD; then
+            CHANGED_FILES=$(git diff --name-only --cached)
+            pre-commit run --files $CHANGED_FILES || true
+            git add .
+            CHANGED_FILES=$(git diff --name-only --cached)
+            if [ -n "$CHANGED_FILES" ]; then
+              pre-commit run --files $CHANGED_FILES
+            fi
+          fi
+
           if ! git diff-index --quiet HEAD; then
             git commit -m "[UPDATE] gRPC code sync from Aegis-AI-Proto"
             git push

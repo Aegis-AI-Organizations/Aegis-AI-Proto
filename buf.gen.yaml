@@ -6,7 +6,7 @@ plugins:
   - plugin: buf.build/grpc/go
     out: gen/go
     opt: paths=source_relative
-  - plugin: buf.build/protocolbuffers/python:v27.2
+  - plugin: buf.build/protocolbuffers/python:v29.3
     out: gen/python
-  - plugin: buf.build/grpc/python:v1.64.1
+  - plugin: buf.build/grpc/python:v1.70.0
     out: gen/python
