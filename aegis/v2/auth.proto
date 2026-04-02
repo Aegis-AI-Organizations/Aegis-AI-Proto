@@ -45,11 +45,7 @@ message LogoutResponse {
   bool success = 1;
 }
 
-message GetMeRequest {
-  string user_id = 1;
-  string company_id = 2;
-  string role = 3;
-}
+message GetMeRequest {}
 
 message GetMeResponse {
   string id = 1;
