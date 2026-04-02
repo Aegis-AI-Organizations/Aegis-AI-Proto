@@ -43,6 +43,8 @@ message GetScanStatusResponse {
   string status = 2;
   google.protobuf.Timestamp started_at = 3;
   google.protobuf.Timestamp completed_at = 4;
+  string temporal_workflow_id = 5;
+  string target_image = 6;
 }
 
 message ListScansRequest {}
