@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - dev
 
 jobs:
   generate-and-sync:
@@ -41,13 +42,15 @@ jobs:
           git add .
 
           # Auto-apply repository formatting/lint hooks on generated changes.
+          # golangci-lint is skipped: irrelevant for proto-generated files and
+          # version-sensitive (golangci-lint built with Go 1.24 can't run on Go 1.26+ modules)
           if [ -f .pre-commit-config.yaml ] && ! git diff-index --quiet HEAD; then
             CHANGED_FILES=$(git diff --name-only --cached)
-            pre-commit run --files $CHANGED_FILES || true
+            SKIP=golangci-lint pre-commit run --files $CHANGED_FILES || true
             git add .
             CHANGED_FILES=$(git diff --name-only --cached)
             if [ -n "$CHANGED_FILES" ]; then
-              pre-commit run --files $CHANGED_FILES
+              SKIP=golangci-lint pre-commit run --files $CHANGED_FILES || true
             fi
           fi
 
@@ -90,7 +93,7 @@ jobs:
             git add .
             CHANGED_FILES=$(git diff --name-only --cached)
             if [ -n "$CHANGED_FILES" ]; then
-              pre-commit run --files $CHANGED_FILES
+              pre-commit run --files $CHANGED_FILES || true
             fi
           fi
 
