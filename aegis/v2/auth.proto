@@ -17,6 +17,15 @@ service AuthService {
 
   // GetMe retrieves the authenticated user's profile and company information.
   rpc GetMe(GetMeRequest) returns (GetMeResponse);
+
+  // UpdateProfile updates the authenticated user's profile information.
+  rpc UpdateProfile(UpdateProfileRequest) returns (UpdateProfileResponse);
+
+  // UpdateEmail updates the authenticated user's email address.
+  rpc UpdateEmail(UpdateEmailRequest) returns (UpdateEmailResponse);
+
+  // UpdatePassword updates the authenticated user's password.
+  rpc UpdatePassword(UpdatePasswordRequest) returns (UpdatePasswordResponse);
 }
 
 message LoginRequest {
@@ -54,4 +63,29 @@ message GetMeResponse {
   string role = 4;
   string company_id = 5;
   string company_name = 6;
+}
+
+message UpdateProfileRequest {
+  string name = 1;
+}
+
+message UpdateProfileResponse {
+  bool success = 1;
+}
+
+message UpdateEmailRequest {
+  string new_email = 1;
+}
+
+message UpdateEmailResponse {
+  bool success = 1;
+}
+
+message UpdatePasswordRequest {
+  string old_password = 1;
+  string new_password = 2;
+}
+
+message UpdatePasswordResponse {
+  bool success = 1;
 }

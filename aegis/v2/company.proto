@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package aegis.v2;
+
+option go_package = "github.com/Aegis-AI-Organizations/aegis-ai-proto/aegis/v2";
+
+// CompanyService handles registration and administrative management of companies.
+service CompanyService {
+  // CreateCompany registers a new company in the system.
+  rpc CreateCompany(CreateCompanyRequest) returns (CreateCompanyResponse);
+
+  // ListCompanies retrieves all companies (SuperAdmin only).
+  rpc ListCompanies(ListCompaniesRequest) returns (ListCompaniesResponse);
+}
+
+message CreateCompanyRequest {
+  string name = 1;
+  string owner_email = 2; // Email of the user who will own this company
+}
+
+message CreateCompanyResponse {
+  string id = 1;
+  string name = 2;
+}
+
+message ListCompaniesRequest {}
+
+message ListCompaniesResponse {
+  repeated CompanySummary companies = 1;
+}
+
+message CompanySummary {
+  string id = 1;
+  string name = 2;
+  string owner_id = 3;
+  string owner_email = 4;
+  int32 member_count = 5;
+}
