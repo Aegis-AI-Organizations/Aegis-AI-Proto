@@ -52,4 +52,5 @@ message CompanySummary {
   string owner_email = 4;
   int32 member_count = 5;
   string deployment_token = 6;
+  string avatar_url = 7;
 }
