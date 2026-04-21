@@ -26,6 +26,9 @@ service AuthService {
 
   // UpdatePassword updates the authenticated user's password.
   rpc UpdatePassword(UpdatePasswordRequest) returns (UpdatePasswordResponse);
+
+  // RemoveAvatar deletes the authenticated user's profile picture.
+  rpc RemoveAvatar(RemoveAvatarRequest) returns (RemoveAvatarResponse);
 }
 
 message LoginRequest {
@@ -89,5 +92,11 @@ message UpdatePasswordRequest {
 }
 
 message UpdatePasswordResponse {
+  bool success = 1;
+}
+
+message RemoveAvatarRequest {}
+
+message RemoveAvatarResponse {
   bool success = 1;
 }
