@@ -48,6 +48,8 @@ Aegis-AI-Proto/
 ├── aegis/
 │   └── v2/                   # Versioned Proto definitions
 │       ├── auth.proto        # Identity & Session
+│       ├── company.proto     # Multi-tenancy & Onboarding
+│       ├── ping.proto        # Health & Handshake
 │       ├── scan.proto        # Orchestration logic
 │       └── vulnerability.proto # Security Intelligence
 ├── gen/                      # Generated bindings (Go/Python)
