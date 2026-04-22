@@ -17,6 +17,32 @@ service CompanyService {
 
   // WatchTeams streams updates about companies and users.
   rpc WatchTeams(WatchTeamsRequest) returns (stream WatchTeamsResponse);
+
+  // ListAuditLogs retrieves system audit trails (Admin only).
+  rpc ListAuditLogs(ListAuditLogsRequest) returns (ListAuditLogsResponse);
+}
+
+message ListAuditLogsRequest {
+  int32 limit = 1;
+  int32 offset = 2;
+  string company_id = 3; // Optional filter
+}
+
+message ListAuditLogsResponse {
+  repeated AuditLogEntry logs = 1;
+  int32 total = 2;
+}
+
+message AuditLogEntry {
+  string id = 1;
+  string user_id = 2;
+  string company_id = 3;
+  string action = 4;
+  string target_type = 5;
+  string target_id = 6;
+  string details = 7; // JSON string
+  string ip_address = 8;
+  string timestamp = 9;
 }
 
 message WatchTeamsRequest {}
