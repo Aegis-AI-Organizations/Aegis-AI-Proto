@@ -19,6 +19,24 @@ service BillingService {
 
   // PreFlightCheck estimates the cost of a scan and checks if the balance is sufficient.
   rpc PreFlightCheck(PreFlightCheckRequest) returns (PreFlightCheckResponse);
+
+  // GetUsageStats retrieves aggregated consumption data for graphs.
+  rpc GetUsageStats(GetUsageStatsRequest) returns (GetUsageStatsResponse);
+}
+
+message GetUsageStatsRequest {
+  string company_id = 1;
+  int32 days = 2; // Default 30 if not set
+}
+
+message UsageDay {
+  string date = 1; // Format YYYY-MM-DD
+  int64 total_consumed = 2;
+}
+
+message GetUsageStatsResponse {
+  repeated UsageDay days = 1;
+  int64 total_period = 2;
 }
 
 message GetBalanceRequest {
