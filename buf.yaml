@@ -1,7 +1,12 @@
 version: v1
 lint:
   use:
-    - DEFAULT
+    - STANDARD
 breaking:
   use:
     - FILE
+  ignore:
+    - RPC_NO_DELETE
+    - MESSAGE_NO_DELETE
+    - FIELD_SAME_TYPE
+    - FIELD_SAME_CARDINALITY
