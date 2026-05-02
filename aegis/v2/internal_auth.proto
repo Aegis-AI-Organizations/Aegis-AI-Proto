@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package aegis.v2;
+
+option go_package = "github.com/Aegis-AI-Organizations/aegis-ai-api-gateway/internal/agrpc/aegis/v2";
+
+// InternalAuthService handles internal authentication and authorization between services.
+service InternalAuthService {
+  // VerifyToken validates a raw JWT token and returns the associated tenant information.
+  rpc VerifyToken(VerifyTokenRequest) returns (VerifyTokenResponse);
+}
+
+message VerifyTokenRequest {
+  string token = 1;
+}
+
+message VerifyTokenResponse {
+  bool valid = 1;
+  string tenant_id = 2;
+}
