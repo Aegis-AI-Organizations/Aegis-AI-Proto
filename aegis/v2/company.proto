@@ -4,6 +4,8 @@ package aegis.v2;
 
 option go_package = "github.com/Aegis-AI-Organizations/aegis-ai-api-gateway/internal/agrpc/aegis/v2";
 
+import "google/protobuf/timestamp.proto";
+
 // CompanyService handles registration and administrative management of companies.
 service CompanyService {
   // CreateCompany registers a new company in the system.
@@ -15,8 +17,8 @@ service CompanyService {
   // OnboardCompany handles the creation of a new company and its owner in one step.
   rpc OnboardCompany(OnboardCompanyRequest) returns (OnboardCompanyResponse);
 
-  // WatchTeams streams updates about companies and users.
-  rpc WatchTeams(WatchTeamsRequest) returns (stream WatchTeamsResponse);
+  // WatchCompanyUpdates streams updates about companies and users.
+  rpc WatchCompanyUpdates(WatchCompanyUpdatesRequest) returns (stream WatchCompanyUpdatesResponse);
 
   // ListAuditLogs retrieves system audit trails (Admin only).
   rpc ListAuditLogs(ListAuditLogsRequest) returns (ListAuditLogsResponse);
@@ -67,12 +69,12 @@ message AuditLogEntry {
   string target_id = 6;
   string details = 7; // JSON string
   string ip_address = 8;
-  string timestamp = 9;
+  google.protobuf.Timestamp timestamp = 9;
 }
 
-message WatchTeamsRequest {}
+message WatchCompanyUpdatesRequest {}
 
-message WatchTeamsResponse {
+message WatchCompanyUpdatesResponse {
   string event_type = 1; // "COMPANY_CREATED", "USER_CREATED", etc.
   string entity_id = 2;
   string entity_name = 3;
