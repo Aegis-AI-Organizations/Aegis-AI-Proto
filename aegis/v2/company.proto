@@ -2,7 +2,9 @@ syntax = "proto3";
 
 package aegis.v2;
 
-option go_package = "github.com/Aegis-AI-Organizations/aegis-ai-proto/aegis/v2";
+option go_package = "github.com/Aegis-AI-Organizations/aegis-ai-api-gateway/internal/agrpc/aegis/v2";
+
+import "google/protobuf/timestamp.proto";
 
 // CompanyService handles registration and administrative management of companies.
 service CompanyService {
@@ -14,11 +16,75 @@ service CompanyService {
 
   // OnboardCompany handles the creation of a new company and its owner in one step.
   rpc OnboardCompany(OnboardCompanyRequest) returns (OnboardCompanyResponse);
+
+  // WatchCompanyUpdates streams updates about companies and users.
+  rpc WatchCompanyUpdates(WatchCompanyUpdatesRequest) returns (stream WatchCompanyUpdatesResponse);
+
+  // ListAuditLogs retrieves system audit trails (Admin only).
+  rpc ListAuditLogs(ListAuditLogsRequest) returns (ListAuditLogsResponse);
+}
+
+enum OrganizationSize {
+  ORGANIZATION_SIZE_UNSPECIFIED = 0;
+  ORGANIZATION_SIZE_1 = 1;
+  ORGANIZATION_SIZE_2_10 = 2;
+  ORGANIZATION_SIZE_11_50 = 3;
+  ORGANIZATION_SIZE_51_200 = 4;
+  ORGANIZATION_SIZE_201_500 = 5;
+  ORGANIZATION_SIZE_501_1000 = 6;
+  ORGANIZATION_SIZE_1001_5000 = 7;
+  ORGANIZATION_SIZE_5001_10000 = 8;
+  ORGANIZATION_SIZE_10001_PLUS = 9;
+}
+
+enum OrganizationType {
+  ORGANIZATION_TYPE_UNSPECIFIED = 0;
+  ORGANIZATION_TYPE_IT_SERVICES_AND_CONSULTING = 1;
+  ORGANIZATION_TYPE_SOFTWARE_DEVELOPMENT = 2;
+  ORGANIZATION_TYPE_FINANCIAL_SERVICES = 3;
+  ORGANIZATION_TYPE_HOSPITALS_AND_HEALTH_CARE = 4;
+  ORGANIZATION_TYPE_RETAIL = 5;
+  ORGANIZATION_TYPE_GOVERNMENT_ADMINISTRATION = 6;
+  ORGANIZATION_TYPE_MANUFACTURING = 7;
+  ORGANIZATION_TYPE_OTHER = 8;
+}
+
+message ListAuditLogsRequest {
+  int32 limit = 1;
+  int32 offset = 2;
+  string company_id = 3; // Optional filter
+}
+
+message ListAuditLogsResponse {
+  repeated AuditLogEntry logs = 1;
+  int32 total = 2;
+}
+
+message AuditLogEntry {
+  string id = 1;
+  string user_id = 2;
+  string company_id = 3;
+  string action = 4;
+  string target_type = 5;
+  string target_id = 6;
+  string details = 7; // JSON string
+  string ip_address = 8;
+  google.protobuf.Timestamp timestamp = 9;
+}
+
+message WatchCompanyUpdatesRequest {}
+
+message WatchCompanyUpdatesResponse {
+  string event_type = 1; // "COMPANY_CREATED", "USER_CREATED", etc.
+  string entity_id = 2;
+  string entity_name = 3;
 }
 
 message CreateCompanyRequest {
   string name = 1;
   string owner_email = 2; // Email of the user who will own this company
+  OrganizationSize org_size = 3;
+  OrganizationType org_type = 4;
 }
 
 message CreateCompanyResponse {
@@ -31,6 +97,8 @@ message OnboardCompanyRequest {
   string owner_name = 2;
   string owner_email = 3;
   string owner_password = 4;
+  OrganizationSize org_size = 5;
+  OrganizationType org_type = 6;
 }
 
 message OnboardCompanyResponse {
@@ -52,4 +120,8 @@ message CompanySummary {
   string owner_email = 4;
   int32 member_count = 5;
   string deployment_token = 6;
+  string avatar_url = 7;
+  OrganizationSize org_size = 8;
+  OrganizationType org_type = 9;
+  int64 token_balance = 10;
 }

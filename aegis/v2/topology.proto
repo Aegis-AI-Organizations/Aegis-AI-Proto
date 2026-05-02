@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package aegis.v2;
+
+option go_package = "github.com/Aegis-AI-Organizations/aegis-ai-api-gateway/internal/agrpc/aegis/v2";
+
+// NetworkTopology represents the scanned infrastructure state.
+message NetworkTopology {
+  repeated Host hosts = 1;
+}
+
+message Host {
+  string id = 1;
+  string hostname = 2;
+  repeated string ip_addresses = 3;
+  repeated Container containers = 4;
+  repeated Process processes = 5; // Processes running directly on the host
+}
+
+message Container {
+  string id = 1;
+  string name = 2;
+  string image = 3;
+  repeated Process processes = 4;
+  repeated Port ports = 5;
+}
+
+message Process {
+  int32 pid = 1;
+  string name = 2;
+  optional string command_line = 3;
+  optional string user = 4;
+}
+
+message Port {
+  int32 number = 1;
+  string protocol = 2; // e.g., "tcp", "udp"
+  optional string state = 3; // e.g., "LISTEN", "ESTABLISHED"
+}

@@ -48,7 +48,12 @@ Aegis-AI-Proto/
 ├── aegis/
 │   └── v2/                   # Versioned Proto definitions
 │       ├── auth.proto        # Identity & Session
+│       ├── billing.proto     # Subscriptions & Quotas
+│       ├── company.proto     # Multi-tenancy & Onboarding
+│       ├── internal_auth.proto # Gateway-to-Brain verification
+│       ├── ping.proto        # Health & Handshake
 │       ├── scan.proto        # Orchestration logic
+│       ├── topology.proto    # Infrastructure & Network maps
 │       └── vulnerability.proto # Security Intelligence
 ├── gen/                      # Generated bindings (Go/Python)
 ├── buf.yaml                  # Buf configuration & dependencies
