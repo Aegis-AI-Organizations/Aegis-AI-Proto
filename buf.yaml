@@ -5,3 +5,7 @@ lint:
 breaking:
   use:
     - FILE
+  ignore:
+    - RPC_NO_DELETE
+    - MESSAGE_NO_DELETE
+    - FIELD_SAME_TYPE
