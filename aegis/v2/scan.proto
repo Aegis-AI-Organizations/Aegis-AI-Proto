@@ -22,6 +22,12 @@ service ScanService {
 
   // WatchScanStatus provides a stream of scan status updates.
   rpc WatchScanStatus(WatchScanStatusRequest) returns (stream WatchScanStatusResponse);
+
+  // UpdateScanStatus updates the status of a scan (called by Agents).
+  rpc UpdateScanStatus(UpdateScanStatusRequest) returns (UpdateScanStatusResponse);
+
+  // CreateVulnerabilities reports findings for a scan (called by Agents).
+  rpc CreateVulnerabilities(CreateVulnerabilitiesRequest) returns (CreateVulnerabilitiesResponse);
 }
 
 message StartScanRequest {
@@ -78,4 +84,36 @@ message WatchScanStatusRequest {
 message WatchScanStatusResponse {
   string scan_id = 1;
   string status = 2;
+}
+
+message UpdateScanStatusRequest {
+  string scan_id = 1;
+  string status = 2;
+}
+
+message UpdateScanStatusResponse {
+  bool success = 1;
+}
+
+message VulnerabilityFinding {
+  string vuln_type = 1;
+  string severity = 2;
+  string target_endpoint = 3;
+  string description = 4;
+  repeated EvidenceFinding evidences = 5;
+}
+
+message EvidenceFinding {
+  string payload_used = 1;
+  string loot_data = 2;
+}
+
+message CreateVulnerabilitiesRequest {
+  string scan_id = 1;
+  repeated VulnerabilityFinding vulnerabilities = 2;
+}
+
+message CreateVulnerabilitiesResponse {
+  bool success = 1;
+  int32 count = 2;
 }
