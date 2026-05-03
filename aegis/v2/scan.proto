@@ -4,7 +4,7 @@ package aegis.v2;
 
 import "google/protobuf/timestamp.proto";
 
-option go_package = "github.com/Aegis-AI-Organizations/Aegis-AI-Proto/gen/go/aegis/v2;aegisv2";
+option go_package = "github.com/Aegis-AI-Organizations/Aegis-AI-Proto/gen/go/aegis/v2;v2";
 
 // ScanService handles orchestration of security scans.
 service ScanService {
