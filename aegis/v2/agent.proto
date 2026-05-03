@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package aegis.v2;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/Aegis-AI-Organizations/Aegis-AI-Proto/gen/go/aegis/v2;aegisv2";
+
+service AgentService {
+  // RegisterAgent is the onboarding call for a new agent using a deployment token.
+  rpc RegisterAgent(RegisterAgentRequest) returns (RegisterAgentResponse);
+  
+  // UpdateAgentStatus updates the current state of a persistent agent.
+  rpc UpdateAgentStatus(UpdateAgentStatusRequest) returns (UpdateAgentStatusResponse);
+  
+  // GetUploadLink returns a presigned URL for MinIO file uploads.
+  rpc GetUploadLink(GetUploadLinkRequest) returns (GetUploadLinkResponse);
+}
+
+message RegisterAgentRequest {
+  string token = 1;
+  string name = 2;
+}
+
+message RegisterAgentResponse {
+  string agent_id = 1;
+}
+
+message UpdateAgentStatusRequest {
+  string agent_id = 1;
+  string status = 2; // IDLE, UPLOADING, UPDATING_CONFIG, ERROR, etc.
+}
+
+message UpdateAgentStatusResponse {
+  bool success = 1;
+}
+
+message GetUploadLinkRequest {
+  string agent_id = 1;
+  string filename = 2;
+  string content_type = 3;
+}
+
+message GetUploadLinkResponse {
+  string url = 1;
+  string method = 2;
+}
