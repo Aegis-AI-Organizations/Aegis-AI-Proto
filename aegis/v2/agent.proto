@@ -2,9 +2,7 @@ syntax = "proto3";
 
 package aegis.v2;
 
-import "google/protobuf/timestamp.proto";
-
-option go_package = "github.com/Aegis-AI-Organizations/Aegis-AI-Proto/gen/go/aegis/v2;v2";
+option go_package = "github.com/Aegis-AI-Organizations/aegis-ai-api-gateway/internal/agrpc/aegis/v2";
 
 service AgentService {
   // RegisterAgent is the onboarding call for a new agent using a deployment token.
