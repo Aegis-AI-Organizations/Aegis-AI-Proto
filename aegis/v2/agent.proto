@@ -13,6 +13,9 @@ service AgentService {
   
   // GetUploadLink returns a presigned URL for MinIO file uploads.
   rpc GetUploadLink(GetUploadLinkRequest) returns (GetUploadLinkResponse);
+
+  // VerifyAgentSecret validates an operational secret against an agent ID.
+  rpc VerifyAgentSecret(VerifyAgentSecretRequest) returns (VerifyAgentSecretResponse);
 }
 
 message RegisterAgentRequest {
@@ -43,4 +46,14 @@ message GetUploadLinkRequest {
 message GetUploadLinkResponse {
   string url = 1;
   string method = 2;
+}
+
+message VerifyAgentSecretRequest {
+  string agent_id = 1;
+  string secret = 2;
+}
+
+message VerifyAgentSecretResponse {
+  bool valid = 1;
+  string tenant_id = 2;
 }
