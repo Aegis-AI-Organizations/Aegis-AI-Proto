@@ -22,6 +22,7 @@ message RegisterAgentRequest {
 
 message RegisterAgentResponse {
   string agent_id = 1;
+  string agent_secret = 2;
 }
 
 message UpdateAgentStatusRequest {
