@@ -57,7 +57,7 @@ jobs:
 
           if ! git diff-index --quiet HEAD; then
             git commit -m "[UPDATE] gRPC code sync from Aegis-AI-Proto"
-            git push
+            git push https://x-access-token:${{ secrets.PROTO_SYNC_TOKEN }}@github.com/${{ github.repository_owner }}/Aegis-AI-Api-Gateway.git
           fi
 
       - name: Sync Python Code (Brain)
@@ -100,5 +100,5 @@ jobs:
 
           if ! git diff-index --quiet HEAD; then
             git commit -m "[UPDATE] gRPC code sync from Aegis-AI-Proto"
-            git push
+            git push https://x-access-token:${{ secrets.PROTO_SYNC_TOKEN }}@github.com/${{ github.repository_owner }}/Aegis-AI-Brain.git
           fi
