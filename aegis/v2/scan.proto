@@ -22,6 +22,9 @@ service ScanService {
 
   // WatchScanStatus provides a stream of scan status updates.
   rpc WatchScanStatus(WatchScanStatusRequest) returns (stream WatchScanStatusResponse);
+
+  // UpdateScanStatus updates the status of a scan (called by Agents).
+  rpc UpdateScanStatus(UpdateScanStatusRequest) returns (UpdateScanStatusResponse);
 }
 
 message StartScanRequest {
@@ -78,4 +81,13 @@ message WatchScanStatusRequest {
 message WatchScanStatusResponse {
   string scan_id = 1;
   string status = 2;
+}
+
+message UpdateScanStatusRequest {
+  string scan_id = 1;
+  string status = 2;
+}
+
+message UpdateScanStatusResponse {
+  bool success = 1;
 }
