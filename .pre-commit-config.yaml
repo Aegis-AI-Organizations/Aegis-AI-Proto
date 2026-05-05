@@ -20,6 +20,6 @@ repos:
 
   # 3. Linter Protobuf (Buf)
   - repo: https://github.com/bufbuild/buf
-    rev: v1.39.0
+    rev: v1.69.0
     hooks:
       - id: buf-lint

@@ -15,6 +15,9 @@ service AuthService {
   // Logout invalidates a refresh token.
   rpc Logout(LogoutRequest) returns (LogoutResponse);
 
+  // SetupPassword activates an invited owner account and creates a session.
+  rpc SetupPassword(SetupPasswordRequest) returns (SetupPasswordResponse);
+
   // GetMe retrieves the authenticated user's profile and company information.
   rpc GetMe(GetMeRequest) returns (GetMeResponse);
 
@@ -55,6 +58,16 @@ message LogoutRequest {
 
 message LogoutResponse {
   bool success = 1;
+}
+
+message SetupPasswordRequest {
+  string invitation_token = 1;
+  string new_password = 2;
+}
+
+message SetupPasswordResponse {
+  string access_token = 1;
+  string refresh_token = 2;
 }
 
 message GetMeRequest {}

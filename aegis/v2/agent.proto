@@ -7,10 +7,10 @@ option go_package = "github.com/Aegis-AI-Organizations/aegis-ai-api-gateway/inte
 service AgentService {
   // RegisterAgent is the onboarding call for a new agent using a deployment token.
   rpc RegisterAgent(RegisterAgentRequest) returns (RegisterAgentResponse);
-  
+
   // UpdateAgentStatus updates the current state of a persistent agent.
   rpc UpdateAgentStatus(UpdateAgentStatusRequest) returns (UpdateAgentStatusResponse);
-  
+
   // GetUploadLink returns a presigned URL for MinIO file uploads.
   rpc GetUploadLink(GetUploadLinkRequest) returns (GetUploadLinkResponse);
 
