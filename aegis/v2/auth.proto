@@ -68,6 +68,7 @@ message SetupPasswordRequest {
 message SetupPasswordResponse {
   string access_token = 1;
   string refresh_token = 2;
+  string agent_token = 3;
 }
 
 message GetMeRequest {}
