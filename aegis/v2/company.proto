@@ -17,6 +17,12 @@ service CompanyService {
   // OnboardCompany handles the creation of a new company and its owner in one step.
   rpc OnboardCompany(OnboardCompanyRequest) returns (OnboardCompanyResponse);
 
+  // RotateAgentToken generates a new deployment token for a company.
+  rpc RotateAgentToken(RotateAgentTokenRequest) returns (RotateAgentTokenResponse);
+
+  // RevokeAgentToken invalidates the current deployment token for a company.
+  rpc RevokeAgentToken(RevokeAgentTokenRequest) returns (RevokeAgentTokenResponse);
+
   // WatchCompanyUpdates streams updates about companies and users.
   rpc WatchCompanyUpdates(WatchCompanyUpdatesRequest) returns (stream WatchCompanyUpdatesResponse);
 
@@ -105,6 +111,22 @@ message OnboardCompanyResponse {
   string company_id = 1;
   string owner_id = 2;
   string deployment_token = 3;
+}
+
+message RotateAgentTokenRequest {
+  string company_id = 1;
+}
+
+message RotateAgentTokenResponse {
+  string agent_token = 1;
+}
+
+message RevokeAgentTokenRequest {
+  string company_id = 1;
+}
+
+message RevokeAgentTokenResponse {
+  bool success = 1;
 }
 
 message ListCompaniesRequest {}
