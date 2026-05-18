@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package aegis.v2;
 
+import "google/protobuf/timestamp.proto";
+
 option go_package = "github.com/Aegis-AI-Organizations/aegis-ai-api-gateway/internal/agrpc/aegis/v2";
 
 service AgentService {
@@ -16,6 +18,12 @@ service AgentService {
 
   // VerifyAgentSecret validates an operational secret against an agent ID.
   rpc VerifyAgentSecret(VerifyAgentSecretRequest) returns (VerifyAgentSecretResponse);
+
+  // ListAgents returns the persistent agents attached to a company.
+  rpc ListAgents(ListAgentsRequest) returns (ListAgentsResponse);
+
+  // GetAgentStatusSummary returns aggregated agent status counters for a company.
+  rpc GetAgentStatusSummary(GetAgentStatusSummaryRequest) returns (GetAgentStatusSummaryResponse);
 }
 
 message RegisterAgentRequest {
@@ -56,4 +64,34 @@ message VerifyAgentSecretRequest {
 message VerifyAgentSecretResponse {
   bool valid = 1;
   string tenant_id = 2;
+}
+
+message AgentRecord {
+  string id = 1;
+  string company_id = 2;
+  string name = 3;
+  string status = 4;
+  google.protobuf.Timestamp last_seen = 5;
+  google.protobuf.Timestamp created_at = 6;
+}
+
+message ListAgentsRequest {
+  // Optional for tenant users; required for internal/admin cross-company reads.
+  string company_id = 1;
+}
+
+message ListAgentsResponse {
+  repeated AgentRecord agents = 1;
+}
+
+message GetAgentStatusSummaryRequest {
+  // Optional for tenant users; required for internal/admin cross-company reads.
+  string company_id = 1;
+}
+
+message GetAgentStatusSummaryResponse {
+  int32 total_agents = 1;
+  int32 active_agents = 2;
+  int32 inactive_agents = 3;
+  google.protobuf.Timestamp last_seen = 4;
 }
