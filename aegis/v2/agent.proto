@@ -39,6 +39,7 @@ message RegisterAgentResponse {
 message UpdateAgentStatusRequest {
   string agent_id = 1;
   string status = 2; // IDLE, UPLOADING, UPDATING_CONFIG, ERROR, etc.
+  string payload_key = 3;
 }
 
 message UpdateAgentStatusResponse {
@@ -54,6 +55,7 @@ message GetUploadLinkRequest {
 message GetUploadLinkResponse {
   string url = 1;
   string method = 2;
+  string object_name = 3;
 }
 
 message VerifyAgentSecretRequest {

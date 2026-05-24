@@ -2,9 +2,9 @@ syntax = "proto3";
 
 package aegis.v2;
 
-option go_package = "github.com/Aegis-AI-Organizations/aegis-ai-api-gateway/internal/agrpc/aegis/v2";
-
 import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/Aegis-AI-Organizations/aegis-ai-api-gateway/internal/agrpc/aegis/v2";
 
 // BillingService handles token management and consumption history.
 service BillingService {
