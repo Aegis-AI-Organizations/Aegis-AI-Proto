@@ -23,6 +23,8 @@ message Container {
   string image = 3;
   repeated Process processes = 4;
   repeated Port ports = 5;
+  optional string image_version = 6;
+  optional string image_hash = 7;
 }
 
 message Process {
