@@ -48,6 +48,7 @@ message GetScanStatusResponse {
   google.protobuf.Timestamp completed_at = 4;
   string temporal_workflow_id = 5;
   string target_image = 6;
+  string debug_bundle = 7;
 }
 
 message ListScansRequest {}
@@ -60,6 +61,7 @@ message ScanDetails {
   google.protobuf.Timestamp started_at = 5;
   google.protobuf.Timestamp completed_at = 6;
   string company_name = 7;
+  string debug_bundle = 8;
 }
 
 message ListScansResponse {
