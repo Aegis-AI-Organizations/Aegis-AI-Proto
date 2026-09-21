@@ -49,6 +49,8 @@ message GetScanStatusResponse {
   string temporal_workflow_id = 5;
   string target_image = 6;
   string debug_bundle = 7;
+  string crew_report_json = 8;
+  string crew_report_markdown = 9;
 }
 
 message ListScansRequest {}
