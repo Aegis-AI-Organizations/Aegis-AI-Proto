@@ -67,6 +67,7 @@ Un `Finding` est un objet JSON. Tout producteur DOIT émettre une liste de
 | `confidence` | enum | non | `CONFIRMED`, `LIKELY` ou `SUSPECTED` : certitude de l'*interprétation*, indépendante de `proof_level`. Côté Worker, elle est portée par `loot_data.confidence`. |
 | `loot_proof` | string | non | Copie de commodité, voir §5. Ignoré par le Brain à l'écriture. |
 | `exfiltrated_data` | array | non | Copie de commodité, voir §5. Ignoré par le Brain à l'écriture. |
+| `remediation` | string | non | Conseil de remédiation lisible par un humain, spécifique à ce finding. Si absent côté Agent-Crew, le Brain le complète depuis sa bibliothèque déterministe indexée par `vuln_type`. |
 
 Tout autre champ PEUT être présent (ex. `exfiltration` côté Worker) ; il est
 conservé tel quel mais n'a aucune valeur contractuelle.

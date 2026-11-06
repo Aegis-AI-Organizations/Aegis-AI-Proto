@@ -13,6 +13,14 @@ jobs:
     steps:
       - name: Checkout Proto Repo
         uses: actions/checkout@v4
+        with:
+          # actions/checkout persists the job's own GITHUB_TOKEN (scoped only
+          # to this repo) as a global git credential by default. That
+          # leftover credential conflicts with the x-access-token URLs below
+          # when cloning/pushing to Gateway/Brain, which GitHub's git-http
+          # backend reports as "Invalid username or token" rather than a
+          # clearer permission error.
+          persist-credentials: false
 
       - name: Setup Buf
         uses: bufbuild/buf-setup-action@v1
